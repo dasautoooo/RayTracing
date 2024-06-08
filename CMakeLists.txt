@@ -7,7 +7,10 @@ add_subdirectory(Pecan/Pecan)
 
 add_executable(RayTracing RayTracing/src/PecanApp.cpp
         RayTracing/src/Renderer.cpp
-        RayTracing/src/Renderer.h)
+        RayTracing/src/Renderer.h
+        RayTracing/src/Camera.cpp
+        RayTracing/src/Camera.h
+        RayTracing/src/Ray.h)
 
 target_include_directories(RayTracing PRIVATE
     ${CMAKE_SOURCE_DIR}/Pecan/Pecan/src
