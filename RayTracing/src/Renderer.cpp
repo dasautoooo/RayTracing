@@ -51,7 +51,7 @@ void Renderer::OnResize(uint32_t width, uint32_t height) {
 
 glm::vec4 Renderer::PerPixel(uint32_t x, uint32_t y) {
     Ray ray;
-    ray.Origin = m_ActiveCamera->GetDirection();
+    ray.Origin = m_ActiveCamera->GetPosition();
     ray.Direction = m_ActiveCamera->GetRayDirections()[x + y * m_FinalImage->GetWidth()];
 
     Renderer::HitPayload payload = TraceRay(ray);

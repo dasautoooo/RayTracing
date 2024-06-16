@@ -51,8 +51,8 @@ public:
 
         ImGui::Begin("Camera");
 
-        ImGui::LabelText("Position", "x: %4f, y: %4f, z: %4f", m_Camera.GetPosition().x, m_Camera.GetPosition().y, m_Camera.GetPosition().z);
-        ImGui::LabelText("Direction", "x: %4f, y: %4f, z: %4f", m_Camera.GetDirection().x, m_Camera.GetDirection().y, m_Camera.GetDirection().z);
+        ImGui::Text("Position x: %.5f, y: %5f, z: %.5f", m_Camera.GetPosition().x, m_Camera.GetPosition().y, m_Camera.GetPosition().z);
+        ImGui::Text("Direction x: %.5f, y: %5f, z: %.5f", m_Camera.GetDirection().x, m_Camera.GetDirection().y, m_Camera.GetDirection().z);
 
         ImGui::End();
 
