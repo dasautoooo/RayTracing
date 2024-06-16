@@ -7,6 +7,9 @@
 
 #include "Renderer.h"
 #include "Camera.h"
+#include "Scene.h"
+
+#include <glm/gtc/type_ptr.hpp>
 
 using namespace Pecan;
 
@@ -15,10 +18,24 @@ class ExampleLayer : public Pecan::Layer
 public:
     ExampleLayer()
         : m_Camera(45.0f, 0.1f, 100.0f) {
+        {
+            Sphere sphere;
+            sphere.Position = { 0.0f, 0.0f, -3.0f };
+            sphere.Radius = 0.5f;
+            sphere.Albedo = { 1.0f, 0.0f, 1.0f };
+            m_Scene.Spheres.push_back(sphere);
+        }
 
+        {
+            Sphere sphere;
+            sphere.Position = { 1.0f, 0.0f, -5.0f };
+            sphere.Radius = 1.5f;
+            sphere.Albedo = { 0.2f, 0.3f, 1.0f };
+            m_Scene.Spheres.push_back(sphere);
+        }
     }
 
-    void OnUpdate(float ts) override
+    virtual void OnUpdate(float ts) override
     {
         m_Camera.OnUpdate(ts);
     }
@@ -32,6 +49,28 @@ public:
         }
         ImGui::End();
 
+        ImGui::Begin("Camera");
+
+        ImGui::LabelText("Position", "x: %4f, y: %4f, z: %4f", m_Camera.GetPosition().x, m_Camera.GetPosition().y, m_Camera.GetPosition().z);
+        ImGui::LabelText("Direction", "x: %4f, y: %4f, z: %4f", m_Camera.GetDirection().x, m_Camera.GetDirection().y, m_Camera.GetDirection().z);
+
+        ImGui::End();
+
+        ImGui::Begin("Scene");
+        for (size_t i = 0; i < m_Scene.Spheres.size(); i++) {
+            ImGui::PushID(i);
+
+            Sphere& sphere = m_Scene.Spheres[i];
+            ImGui::DragFloat3("Position", glm::value_ptr(sphere.Position), 0.1f);
+            ImGui::DragFloat("Radius", &sphere.Radius, 0.1f);
+            ImGui::ColorEdit3("Albedo", glm::value_ptr(sphere.Albedo));
+
+            ImGui::Separator();
+
+            ImGui::PopID();
+        }
+        ImGui::End();
+
         ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
         ImGui::Begin("Viewport");
 
@@ -39,9 +78,11 @@ public:
         m_ViewportHeight = ImGui::GetContentRegionAvail().y;
 
         auto image = m_Renderer.GetFinalImage();
-
         if (image)
-            ImGui::Image(image->GetDescriptorSet(), { (float)image->GetWidth(), (float)image->GetHeight() }, ImVec2(0, 1), ImVec2(1, 0));
+            ImGui::Image(image->GetDescriptorSet(),
+                         { (float)image->GetWidth(), (float)image->GetHeight() },
+                         ImVec2(0, 1),
+                         ImVec2(1, 0));
 
         ImGui::End();
         ImGui::PopStyleVar();
@@ -55,15 +96,14 @@ public:
 
         m_Renderer.OnResize(m_ViewportWidth, m_ViewportHeight);
         m_Camera.OnResize(m_ViewportWidth, m_ViewportHeight);
-        m_Renderer.Render(m_Camera);
+        m_Renderer.Render(m_Scene, m_Camera);
 
         m_LastRenderTime = timer.ElapsedMillis();
     }
-
 private:
     Renderer m_Renderer;
     Camera m_Camera;
-
+    Scene m_Scene;
     uint32_t m_ViewportWidth = 0, m_ViewportHeight = 0;
     float m_LastRenderTime = 0.0f;
 };
