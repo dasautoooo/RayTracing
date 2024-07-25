@@ -21,14 +21,14 @@ Camera::Camera(float verticalFOV, float nearClip, float farClip)
     m_Position = glm::vec3(0, 0, 3);
 }
 
-void Camera::OnUpdate(float ts) {
+bool Camera::OnUpdate(float ts) {
     glm::vec2 mousePos = Pecan::Input::GetMousePosition();
     glm::vec2 delta = (mousePos - m_LastMousePosition) * 0.002f;
     m_LastMousePosition = mousePos;
 
     if (!Pecan::Input::IsMouseButtonDown(Pecan::MouseButton::Right)) {
         Pecan::Input::SetCursorMode(Pecan::CursorMode::Normal);
-        return;
+        return false;
     }
 
     Pecan::Input::SetCursorMode(Pecan::CursorMode::Locked);
@@ -79,6 +79,7 @@ void Camera::OnUpdate(float ts) {
         RecalculateRayDirections();
     }
 
+    return moved;
 }
 
 void Camera::OnResize(uint32_t width, uint32_t height) {
