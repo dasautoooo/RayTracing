@@ -47,6 +47,8 @@ private:
     std::shared_ptr<Pecan::Image> m_FinalImage;
     Settings m_Settings;
 
+    std::vector<uint32_t> m_ImageVerticalIter, m_ImageHorizontalIter;
+
     const Scene* m_ActiveScene = nullptr;
     const Camera* m_ActiveCamera = nullptr;
 

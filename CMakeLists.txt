@@ -21,6 +21,7 @@ target_link_libraries(RayTracing PRIVATE Pecan)
 
 # macOS-specific settings
 if(APPLE)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -stdlib=libc++ -fexperimental-library") # For use of parallel execution
     target_compile_definitions(RayTracing PRIVATE PE_PLATFORM_MACOS)
     target_compile_options(RayTracing PRIVATE -Wall -Wextra -pedantic)  # Enable common warnings
 endif()
